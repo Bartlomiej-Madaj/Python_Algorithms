@@ -23,6 +23,149 @@ class LinkedList:
 
         self._length += 1
 
+    def prepend(self, value):
+        new_node = Node(value)
+
+        if not self.head:
+            self.head = new_node
+            self.tail = new_node
+        
+        else:
+            new_node.next = self.head
+            self.head = new_node
+
+        self._length += 1
+
+    def delete_first(self):
+        if not self.head:
+            return
+
+        if self.head is self.tail:
+            temp = self.head
+            self.head = None
+            self.head = None
+            del temp
+
+        else:
+            temp = self.head
+            self.head = self.head.next
+            del temp
+        
+        self._length -= 1
+
+    def delete_last(self):
+        if not self.head:
+            return
+        
+        if self.head is self.tail:
+            temp = self.tail
+            self.head = self.tail = None
+            del temp
+
+        else:
+            before_last = self.head
+            while before_last.next.next:
+                before_last = before_last.next
+
+            temp = self.tail
+            self.tail = before_last
+            self.tail.next = None
+            del temp
+
+        self._length -= 1
+
+    def get_by_index(self, index:int)->Node:
+        if not self.head:
+            raise KeyError('Given index does not exist.')
+        
+        if self.head is self.tail:
+            return self.head
+        
+        if index >= self._length or index < -1:
+            raise KeyError('Given index does not exist.')
+
+        if index == -1:
+            return self.tail
+        
+        node = self.head
+        for _ in range(index):
+            node = node.next
+
+        return node
+    
+    def set(self, index:int, value)->bool:
+        if not self.head:
+            raise KeyError('Given index does not exist.')
+        
+        if index >= self._length or index < -1:
+            raise KeyError('Given index does not exist.')
+        
+        if index == -1:
+            self.tail.value = value
+            return True
+        
+        if index == 0:
+            self.head.value = value
+            return True
+        
+        node = self.head
+        for _ in range(index):
+            node = node.next
+
+        node.value = value
+        return True
+
+    def reverse(self):
+        if not self.head:
+            return
+        
+        if self._length == 1:
+            return
+        
+        before = None
+        current: Node = self.head
+        next_node: Node = self.head.next
+        while current:
+            current.next = before
+            before = current
+            current = next_node
+            next_node = next_node.next if next_node else None
+
+        self.head, self.tail = self.tail, self.head
+
+    def insert(self, index:int, value)->bool:
+        if index >= self._length or index < 0:
+            raise KeyError('Given index does not exist.')
+        
+        if index == 0:
+            self.prepend(value)
+            self._length += 1
+            return True
+        
+        new_node = Node(value)
+        before = self.head
+        after = self.head.next
+        for _ in range(index-1):
+            before = before.next
+            after = after.next
+
+        before.next = new_node
+        new_node.next = after
+        self._length += 1
+        return True
+    
+    def get_by_value(self, value)-> Node:
+
+        """
+        First occurrence of the value. Retrun node.
+        """
+
+        pass
+    # def remove(self, value):
+    #     node = self.get(val)
+
+
+
     def print_linked_list(self):
         str_linked = ''
         if not self.head:
@@ -48,6 +191,13 @@ ll.append(8)
 ll.append(45)
 ll.append(23)
 ll.append(1)
-
+ll.prepend(66)
+ll.insert(2, 32)
+ll.delete_first()
+ll.delete_last()
+ll.set(-1, 48)
+print(ll.print_linked_list())
+ll.reverse()
 print(ll.print_linked_list())
 print(ll.length())
+print(ll.get_by_index(5).value)
