@@ -76,13 +76,13 @@ class LinkedList:
 
     def get_by_index(self, index:int)->Node:
         if not self.head:
+            raise KeyError('Given index does not exist.')     
+        
+        if index >= self._length or index < -1:
             raise KeyError('Given index does not exist.')
         
         if self.head is self.tail:
             return self.head
-        
-        if index >= self._length or index < -1:
-            raise KeyError('Given index does not exist.')
 
         if index == -1:
             return self.tail
@@ -160,10 +160,45 @@ class LinkedList:
         First occurrence of the value. Retrun node.
         """
 
-        pass
-    # def remove(self, value):
-    #     node = self.get(val)
+        if not self.head:
+            return None
+        
+        node = self.head 
+        while node:
+            if node.value == value:
+                break
+            node = node.next
 
+        return node
+    
+    def remove(self, value)->bool:
+        node_to_remove = self.get_by_value(value)
+        if not node_to_remove:
+            return False
+        
+        if self.head is node_to_remove:
+            self.delete_first()
+            return True
+        
+        if self.tail is node_to_remove:
+            self.delete_last()
+            return True
+
+
+        temp_node = self.head.next
+        before_node = self.head
+        while temp_node:
+            if temp_node is node_to_remove:
+                break
+            before_node = temp_node
+            temp_node = temp_node.next
+
+        next_node = temp_node.next
+        before_node.next = next_node
+        self._length -= 1
+        del temp_node
+        del node_to_remove
+        return True
 
 
     def print_linked_list(self):
@@ -198,6 +233,7 @@ ll.delete_last()
 ll.set(-1, 48)
 print(ll.print_linked_list())
 ll.reverse()
+ll.remove(32)
 print(ll.print_linked_list())
 print(ll.length())
 print(ll.get_by_index(5).value)
