@@ -22,7 +22,27 @@ class Graph:
             return True
         
         return False
-    
+
+    def remove_edge(self, vertex1:str, vertex2:str) -> bool:
+        if vertex1 in self.adj_list.get(vertex2) and vertex2 in self.adj_list.get(vertex1):
+            self.adj_list.get(vertex1).remove(vertex2)
+            self.adj_list.get(vertex2).remove(vertex1)
+            return True
+        
+        return False
+
+    def remove_vertex(self, vertex:str) -> bool:
+        if not vertex in self.adj_list:
+            return False
+        
+        edges_to_remove = self.adj_list.get(vertex)
+        for ver in edges_to_remove:
+            self.adj_list.get(ver).remove(vertex)
+        
+        del self.adj_list[vertex]
+        return True
+
+     
     def print_graph(self):
         if not bool(self.adj_list):
             return '{}'
@@ -38,8 +58,12 @@ class Graph:
 
         return str_graph
 
+
+
 graph = Graph()
 graph.add_vertex("A")
 graph.add_vertex("B")
 graph.add_edge("A", "B")
+print(graph.print_graph())
+graph.remove_vertex("B")
 print(graph.print_graph())
