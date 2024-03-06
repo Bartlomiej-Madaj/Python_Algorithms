@@ -1,23 +1,5 @@
 from linked_list import Node
 
-class StackIterable:
-    def __init__(self, stack:'Stack'):
-        self.stack = stack
-        self.index = 0
-    
-    def __iter__(self):
-        return self
-        
-    def __next__(self):
-        if self.stack._length <= self.index:
-            raise StopIteration()
-        
-        temp = self.stack.top
-        for _ in range(self.index):
-            temp = temp.next
-        self.index += 1
-
-        return temp
     
 class Stack:
     def __init__(self, value=None):
@@ -69,8 +51,26 @@ class Stack:
             print(str_stack)
 
     def __iter__(self):
-        return StackIterable(self)
+        return self.StackIterable(self)
 
+    class StackIterable:
+        def __init__(self, stack:'Stack'):
+            self.stack = stack
+            self.index = 0
+        
+        def __iter__(self):
+            return self
+            
+        def __next__(self):
+            if self.stack._length <= self.index:
+                raise StopIteration()
+            
+            temp = self.stack.top
+            for _ in range(self.index):
+                temp = temp.next
+            self.index += 1
+
+            return temp
 
 
 if __name__ == '__main__':
