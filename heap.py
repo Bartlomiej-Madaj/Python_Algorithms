@@ -34,6 +34,17 @@ def build_max_heap(a):
     for i in range(heap_size//2, 0, -1):
         max_heapify(a, heap_size, i)
 
+def heap_sort(a):
+    build_max_heap(a)
+
+    for i in range(len(a)-1, 1, -1):
+        # swap elements
+        a[i], a[1] = a[1], a[i]
+
+        # after the swap the last element is now sorted, but the new root may break the max-heap condition
+        # fix it by calling max-heapify with a smaller heap size (sorted elements are out of the picture)
+        max_heapify(a, i, 1)
+
 
 def main():
     # root is at index 1
@@ -46,5 +57,9 @@ def main():
     # print heap starting with the root at index 1
     print(f'Heap: {a[1:]}')
 
+    heap_sort(a)
+    print(f'After sort: ', a[1:])
+
 if __name__ == '__main__':
+
     main()
